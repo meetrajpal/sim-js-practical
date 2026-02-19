@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="//d26tpo4cm8sb6k.cloudfront.net/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="//d26tpo4cm8sb6k.cloudfront.net/icon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="//d26tpo4cm8sb6k.cloudfront.net/icon-16x16.png"
+    />
+
+    <title>Online Calculator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    />
+
+    <link rel="stylesheet" href="./assets/css/index.css" />
+  </head>
+  <body>
+    <div
+      id="sidebar"
+      class="offcanvas offcanvas-start"
+      tabindex="-1"
+      data-bs-backdrop="false"
+    >
+      <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title">Calculator</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+        ></button>
+      </div>
+      <div class="offcanvas-body p-0">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item cursor-pointer" id="standardBtn">
+            <i class="bi bi-calculator"></i> Standard
+          </li>
+          <li class="list-group-item cursor-pointer" id="scientificBtn">
+            <i class="bi bi-flask"></i> Scientific
+          </li>
+        </ul>
+      </div>
+      <div class="offcanvas-footer p-3">
+        <div class="form-check form-check-reverse form-switch">
+          <label class="form-check-label" for="darkModeSwitch">
+            Dark Mode
+          </label>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="darkModeSwitch"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid border">
+      <div class="row">
+        <main
+          class="col-12 col-lg-10 d-flex flex-column"
+          style="height: 100vh; padding: 0.3rem"
+        >
+          <nav class="navbar p-0">
+            <div class="d-flex gap-2">
+              <button
+                class="navbar-toggler p-0 border-0"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#sidebar"
+              >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <p id="calcTitle" class="fs-2 m-0">Standard</p>
+            </div>
+          </nav>
+          <div id="lastResult" class="text-end fs-5">&nbsp;</div>
+          <div
+            id="result"
+            class="text-end flex-grow-1"
+            style="font-size: clamp(2rem, 5vw, 5rem)"
+          >
+            0
+          </div>
+
+          <div class="gap-3 px-1 scientificControls d-none">
+            <button id="degBtn" class="btn cstBtn2" data-action="deg-toggle">
+              DEG
+            </button>
+            <button class="btn cstBtn2" data-action="fe-toggle">F-E</button>
+          </div>
+          <div class="d-flex px-1" id="memoryOperations">
+            <button class="btn" data-action="mc">MC</button>
+            <button class="btn" data-action="mr">MR</button>
+            <button class="btn" data-action="mplus">M+</button>
+            <button class="btn" data-action="mminus">M-</button>
+            <button class="btn" data-action="ms">MS</button>
+          </div>
+          <div class="gap-3 px-1 border-top scientificControls d-none">
+            <button
+              class="btn"
+              id="trigBtn"
+              data-bs-toggle="popover"
+              data-bs-placement="bottom"
+              type="button"
+            >
+              <svg
+                fill="#000000"
+                height="20px"
+                width="20px"
+                version="1.1"
+                id="trigoLogo"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 0 284.356 284.356"
+                xml:space="preserve"
+              >
+                <g>
+                  <path
+                    d="M0,284.356h284.356V0L0,284.356z M269.356,269.356H36.213L269.356,36.213V269.356z"
+                  />
+                </g>
+              </svg>
+              Trigonometry
+            </button>
+
+            <button
+              class="btn"
+              id="fnBtn"
+              data-bs-toggle="popover"
+              data-bs-placement="bottom"
+              type="button"
+            >
+              <svg
+                fill="#000000"
+                version="1.1"
+                id="fnLogo"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                width="20px"
+                height="20px"
+                viewBox="0 0 142.514 142.514"
+                xml:space="preserve"
+              >
+                <g>
+                  <g>
+                    <path
+                      d="M34.367,142.514c11.645,0,17.827-10.4,19.645-16.544c0.029-0.097,0.056-0.196,0.081-0.297
+			c4.236-17.545,10.984-45.353,15.983-65.58h17.886c3.363,0,6.09-2.726,6.09-6.09c0-3.364-2.727-6.09-6.09-6.09H73.103
+			c1.6-6.373,2.771-10.912,3.232-12.461l0.512-1.734c1.888-6.443,6.309-21.535,13.146-21.535c6.34,0,7.285,9.764,7.328,10.236
+			c0.27,3.343,3.186,5.868,6.537,5.579c3.354-0.256,5.864-3.187,5.605-6.539C108.894,14.036,104.087,0,89.991,0
+			C74.03,0,68.038,20.458,65.159,30.292l-0.49,1.659c-0.585,1.946-2.12,7.942-4.122,15.962H39.239c-3.364,0-6.09,2.726-6.09,6.09
+			c0,3.364,2.726,6.09,6.09,6.09H57.53c-6.253,25.362-14.334,58.815-15.223,62.498c-0.332,0.965-2.829,7.742-7.937,7.742
+			c-7.8,0-11.177-10.948-11.204-11.03c-0.936-3.229-4.305-5.098-7.544-4.156c-3.23,0.937-5.092,4.314-4.156,7.545
+			C13.597,130.053,20.816,142.514,34.367,142.514z"
+                    />
+                  </g>
+                </g>
+              </svg>
+              Function
+            </button>
+          </div>
+
+          <div id="btnGrid" class="d-flex flex-column flex-grow-1"></div>
+        </main>
+        <div
+          id="historyWrapper"
+          class="col-2 d-none d-lg-flex flex-column justify-content-between py-2"
+        >
+          <div>
+            <div class="d-flex gap-2" id="historyOptions">
+              <input
+                type="radio"
+                class="btn-check"
+                name="options"
+                id="optionHistory"
+                autocomplete="off"
+              />
+              <label
+                class="btn radioBtn"
+                for="optionHistory"
+                id="labelOptionHistory"
+                >History</label
+              >
+              <input
+                type="radio"
+                class="btn-check"
+                name="options"
+                id="optionMemory"
+                autocomplete="off"
+              />
+              <label
+                class="btn radioBtn"
+                for="optionMemory"
+                id="labelOptionMemory"
+                >Memory</label
+              >
+            </div>
+            <div
+              id="history"
+              class="overflow-y-scroll"
+              style="height: calc(100vh - 100px)"
+            ></div>
+          </div>
+          <div class="text-end" id="clearHistory">
+            <button
+              type="button"
+              class="btn border-0"
+              data-bs-toggle="modal"
+              data-bs-target="#clearStorageModal"
+              id="trashBtn"
+            >
+              <span class="bi bi-trash"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="clearStorageModal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Warning</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              No
+            </button>
+            <button type="button" class="btn btn-danger" id="modalConfirmBtn">
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <script defer src="./assets/js/index.js"></script>
+  </body>
+</html>

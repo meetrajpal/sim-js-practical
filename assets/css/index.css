@@ -1,0 +1,61 @@
+* {
+  scroll-behavior: smooth;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.trig-popover,
+.fn-popover {
+  max-width: none !important;
+  width: 300px;
+}
+
+.popover-body {
+  width: 100%;
+  padding: 1% !important;
+}
+
+html[data-bs-theme="light"] {
+  --bs-body-bg: #f3f3f3;
+}
+
+html[data-bs-theme="light"] .cstBtn {
+  background-color: white;
+}
+
+html[data-bs-theme="light"] .cstBtn:hover,
+html[data-bs-theme="light"] .cstBtn2:hover,
+html[data-bs-theme="light"] #standardBtn:hover,
+html[data-bs-theme="light"] #scientificBtn:hover {
+  background-color: #f9f9f9;
+}
+
+html[data-bs-theme="dark"] {
+  --bs-body-bg: #000000;
+}
+
+html[data-bs-theme="dark"] .cstBtn {
+  background-color: rgb(50, 50, 50);
+}
+
+html[data-bs-theme="dark"] .cstBtn:hover,
+html[data-bs-theme="dark"] .cstBtn2:hover,
+html[data-bs-theme="dark"] #standardBtn:hover,
+html[data-bs-theme="dark"] #scientificBtn:hover {
+  background-color: rgb(59, 59, 59);
+}
+
+.radioBtn {
+  border: none;
+  border-radius: 0% !important;
+}
+
+#optionHistory:checked + #labelOptionHistory {
+  border-bottom: 2px solid !important;
+}
+
+#optionMemory:checked + #labelOptionMemory {
+  border-bottom: 2px solid !important;
+}
