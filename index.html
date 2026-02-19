@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Admin</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    />
+
+    <link rel="stylesheet" href="./assets/css/index.css" />
+  </head>
+  <body>
+    <nav
+      class="navbar bg-body navbar-expand-lg position-sticky top-0 border-bottom"
+      style="z-index: 1000"
+    >
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#sidebar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="container justify-content-center">
+        <a href="#" class="navbar-brand">Store</a>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div
+          id="sidebar"
+          class="offcanvas-lg offcanvas-start col-2 position-fixed"
+        >
+          <div class="list-group list-group-flush">
+            <a class="list-group-item active" href="#">
+              <span class="bi bi-speedometer2 me-2"></span>Dashboard
+            </a>
+            <a class="list-group-item bg-transparent" href="#">
+              <span class="bi bi-box me-2"></span>Products
+            </a>
+          </div>
+        </div>
+        <main class="col-12 col-lg-10 offset-2 border-start">
+          <div class="my-5">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        id="checkAll"
+                      />
+                    </th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input type="checkbox" class="form-check-input" /></td>
+                    <td>123</td>
+                    <td>Keyboard</td>
+                    <td>
+                      <img
+                        class="img-fluid"
+                        src="https://images.pexels.com/photos/18311093/pexels-photo-18311093.jpeg"
+                        alt="keyboard"
+                        width="100rem"
+                      />
+                    </td>
+                    <td>&#8377; 123</td>
+                    <td>150</td>
+                    <td style="max-width: 500px">
+                      Lorem ipsum dolor sit amet Lorem ipsum, dolor sit amet
+                      consectetur adipisicing elit. Maxime consequatur iure
+                      vitae minus adipisci repudiandae quo cum, libero
+                      perferendis dolorum temporibus reprehenderit doloribus,
+                      sed nihil. Doloremque facilis cumque a quasi?
+                    </td>
+                    <td>
+                      <button class="btn btn-warning" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button class="btn btn-danger" title="Delete">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" class="form-check-input" /></td>
+                    <td>123</td>
+                    <td>Keyboard</td>
+                    <td>
+                      <img
+                        class="img-fluid"
+                        src="https://images.pexels.com/photos/18311093/pexels-photo-18311093.jpeg"
+                        alt="keyboard"
+                        width="100rem"
+                      />
+                    </td>
+                    <td>&#8377; 123</td>
+                    <td>150</td>
+                    <td style="max-width: 500px">
+                      Lorem ipsum dolor sit amet Lorem ipsum, dolor sit amet
+                      consectetur adipisicing elit. Maxime consequatur iure
+                      vitae minus adipisci repudiandae quo cum, libero
+                      perferendis dolorum temporibus reprehenderit doloribus,
+                      sed nihil. Doloremque facilis cumque a quasi?
+                    </td>
+                    <td>
+                      <button class="btn btn-warning" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button class="btn btn-danger" title="Delete">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" class="form-check-input" /></td>
+                    <td>123</td>
+                    <td>Keyboard</td>
+                    <td>
+                      <img
+                        class="img-fluid"
+                        src="https://images.pexels.com/photos/18311093/pexels-photo-18311093.jpeg"
+                        alt="keyboard"
+                        width="100rem"
+                      />
+                    </td>
+                    <td>&#8377; 123</td>
+                    <td>150</td>
+                    <td style="max-width: 500px">
+                      Lorem ipsum dolor sit amet Lorem ipsum, dolor sit amet
+                      consectetur adipisicing elit. Maxime consequatur iure
+                      vitae minus adipisci repudiandae quo cum, libero
+                      perferendis dolorum temporibus reprehenderit doloribus,
+                      sed nihil. Doloremque facilis cumque a quasi?
+                    </td>
+                    <td>
+                      <button class="btn btn-warning" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button class="btn btn-danger" title="Delete">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" class="form-check-input" /></td>
+                    <td>123</td>
+                    <td>Keyboard</td>
+                    <td>
+                      <img
+                        class="img-fluid"
+                        src="https://images.pexels.com/photos/18311093/pexels-photo-18311093.jpeg"
+                        alt="keyboard"
+                        width="100rem"
+                      />
+                    </td>
+                    <td>&#8377; 123</td>
+                    <td>150</td>
+                    <td style="max-width: 500px">
+                      Lorem ipsum dolor sit amet Lorem ipsum, dolor sit amet
+                      consectetur adipisicing elit. Maxime consequatur iure
+                      vitae minus adipisci repudiandae quo cum, libero
+                      perferendis dolorum temporibus reprehenderit doloribus,
+                      sed nihil. Doloremque facilis cumque a quasi?
+                    </td>
+                    <td>
+                      <button class="btn btn-warning" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button class="btn btn-danger" title="Delete">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" class="form-check-input" /></td>
+                    <td>123</td>
+                    <td>Keyboard</td>
+                    <td>
+                      <img
+                        class="img-fluid"
+                        src="https://images.pexels.com/photos/18311093/pexels-photo-18311093.jpeg"
+                        alt="keyboard"
+                        width="100rem"
+                      />
+                    </td>
+                    <td>&#8377; 123</td>
+                    <td>150</td>
+                    <td style="max-width: 500px">
+                      Lorem ipsum dolor sit amet Lorem ipsum, dolor sit amet
+                      consectetur adipisicing elit. Maxime consequatur iure
+                      vitae minus adipisci repudiandae quo cum, libero
+                      perferendis dolorum temporibus reprehenderit doloribus,
+                      sed nihil. Doloremque facilis cumque a quasi?
+                    </td>
+                    <td>
+                      <button class="btn btn-warning" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button class="btn btn-danger" title="Delete">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" class="form-check-input" /></td>
+                    <td>123</td>
+                    <td>Keyboard</td>
+                    <td>
+                      <img
+                        class="img-fluid"
+                        src="https://images.pexels.com/photos/18311093/pexels-photo-18311093.jpeg"
+                        alt="keyboard"
+                        width="100rem"
+                      />
+                    </td>
+                    <td>&#8377; 123</td>
+                    <td>150</td>
+                    <td style="max-width: 500px">
+                      Lorem ipsum dolor sit amet Lorem ipsum, dolor sit amet
+                      consectetur adipisicing elit. Maxime consequatur iure
+                      vitae minus adipisci repudiandae quo cum, libero
+                      perferendis dolorum temporibus reprehenderit doloribus,
+                      sed nihil. Doloremque facilis cumque a quasi?
+                    </td>
+                    <td>
+                      <button class="btn btn-warning" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button class="btn btn-danger" title="Delete">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <nav>
+              <ul class="pagination justify-content-center mb-0 mt-3">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#">Previous</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#">Next</a>
+                </li>
+              </ul>
+            </nav>
+            <p class="text-center text-muted small mt-2">
+              Showing 1-10 of 247 products
+            </p>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <script defer src="./assets/js/index.js"></script>
+  </body>
+</html>
