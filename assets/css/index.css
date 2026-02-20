@@ -1,0 +1,18 @@
+* {
+  scroll-behavior: smooth;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.radioBtn {
+  border: none;
+  border-radius: 0%;
+}
+
+#optionDashboard:checked + #labelOptionDashboard,
+#optionProducts:checked + #labelOptionProducts {
+  color: white;
+  background-color: var(--bs-primary);
+}
