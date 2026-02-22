@@ -103,19 +103,19 @@
             <div class="my-5 row gap-5 justify-content-center">
               <div class="col-12 col-lg-3 card border-0 shadow-sm p-0">
                 <div class="card-body h1 d-flex justify-content-between">
-                  <span class="bi bi-box-seam text-success"></span> 24,582
+                  <span class="bi bi-box-seam text-success"></span>
                 </div>
                 <div class="card-footer">Total Products</div>
               </div>
               <div class="col-12 col-lg-3 card border-0 shadow-sm p-0">
                 <div class="card-body h1 d-flex justify-content-between">
-                  <span class="bi bi-boxes text-success"></span> 24,582
+                  <span class="bi bi-boxes text-success"></span>
                 </div>
                 <div class="card-footer">Total Quantity</div>
               </div>
               <div class="col-12 col-lg-3 card border-0 shadow-sm p-0">
                 <div class="card-body h1 d-flex justify-content-between">
-                  <span class="text-success">&#8377;</span> 24,582
+                  <span class="text-success">&#8377;</span>
                 </div>
                 <div class="card-footer">Inventory Value</div>
               </div>
@@ -165,7 +165,7 @@
               </div>
             </div>
             <div class="table-responsive mt-3">
-              <table class="table table-hover align-middle text-center border">
+              <table class="table table-hover align-middle border">
                 <thead>
                   <tr>
                     <th>
@@ -176,70 +176,25 @@
                       />
                     </th>
                     <th class="position-sticky start-0">ID</th>
-                    <th>Name</th>
+                    <th class="cursor-pointer" data-sort="name">
+                      Name <span class="sort-icon">⇅</span>
+                    </th>
+                    <th class="cursor-pointer" data-sort="price">
+                      Price <span class="sort-icon">⇅</span>
+                    </th>
                     <th>Image</th>
-                    <th>Price</th>
                     <th>Quantity</th>
                     <th>Description</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr class="cursor-pointer">
-                    <td><input type="checkbox" class="form-check-input" /></td>
-                    <td class="position-sticky start-0">123</td>
-                    <td>Keyboard</td>
-                    <td style="width: 100px">
-                      <img
-                        class="img-fluid"
-                        src="https://images.pexels.com/photos/18311093/pexels-photo-18311093.jpeg"
-                        alt="keyboard"
-                      />
-                    </td>
-                    <td>&#8377;123</td>
-                    <td>150</td>
-                    <td
-                      class="description text-truncate"
-                      style="max-width: 200px"
-                    >
-                      Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                      Atque explicabo architecto, omnis magnam inventore iusto
-                      facere. Ab deserunt ipsa id, quos dolorem accusamus fugit
-                      quo libero obcaecati corporis? Vitae, similique.
-                    </td>
-                    <td>
-                      <div class="d-flex gap-1 justify-content-center">
-                        <button class="btn btn-warning" title="Edit">
-                          <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-danger" title="Delete">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
+                <tbody></tbody>
               </table>
             </div>
             <nav>
-              <ul class="pagination justify-content-center mb-0 mt-3">
-                <li class="page-item disabled">
-                  <a class="page-link" href="#">Previous</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">Next</a>
-                </li>
-              </ul>
+              <ul class="pagination justify-content-center mb-0 mt-3"></ul>
             </nav>
-            <p class="text-center text-muted small mt-2">
-              Showing 1-10 of 247 products
-            </p>
+            <p class="text-center text-muted small mt-2"></p>
           </div>
         </main>
       </div>
@@ -297,6 +252,7 @@
                       name="image"
                       id="prodImg"
                       class="form-control"
+                      accept="image/*"
                       required
                     />
                   </div>
@@ -367,7 +323,7 @@
           </div>
           <div class="modal-body">
             Are you sure you want to delete
-            <span id="delCheckItems">10</span> entries?
+            <span id="delCheckItems"></span> entries?
           </div>
           <div class="modal-footer">
             <button
@@ -383,13 +339,42 @@
       </div>
     </div>
 
+    <div
+      class="modal fade"
+      id="imgPreviewModal"
+      tabindex="-1"
+      data-bs-backdrop="static"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content bg-transparent border-0">
+          <div class="text-end mb-2">
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              data-bs-target="#imgPreviewModal"
+              class="btn btn-primary border bi bi-x-lg"
+              title="close"
+            ></button>
+          </div>
+          <div class="modal-body text-center p-0">
+            <img
+              id="imgPreviewEl"
+              src=""
+              alt="preview"
+              class="img-fluid rounded"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script
+      defer
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
 
     <script defer src="./assets/js/index.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
   </body>
 </html>
