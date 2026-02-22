@@ -104,15 +104,6 @@ function pageData() {
   return sortData(state.filtered).slice(start, start + PAGE_SIZE);
 }
 
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
 function renderTable() {
   const tbody = document.querySelector("#productsPage tbody");
 
@@ -158,12 +149,10 @@ function renderTable() {
   });
 
   tbody.querySelectorAll(".inline-img-input").forEach((input) => {
-    input.addEventListener("change", async () => {
-      if (input.files[0]) {
-        const id = input.dataset.id;
-        const preview = tbody.querySelector(`.row-img[data-id="${id}"]`);
-        if (preview) preview.src = await fileToBase64(input.files[0]);
-      }
+    input.addEventListener("input", () => {
+      const id = input.dataset.id;
+      const preview = tbody.querySelector(`.row-img[data-id="${id}"]`);
+      if (preview && input.value.trim()) preview.src = input.value.trim();
     });
   });
 
@@ -211,12 +200,7 @@ function renderRow(p) {
             ? `<img class="img-fluid row-img mb-1 cursor-pointer" data-id="${p.id}" src="${p.image}" alt="${p.name}" style="max-height:50px;display:block" data-bs-toggle="modal" data-bs-target="#imgPreviewModal" data-full-src="${p.image}" />`
             : `<span class="text-muted small no-img-label" data-id="${p.id}">No image</span>`
         }
-        <input
-          type="file"
-          class="form-control form-control-sm inline-img-input d-none"
-          data-id="${p.id}"
-          accept="image/*"
-        />
+        <input type="url" class="form-control form-control-sm inline-img-input row-input d-none" data-id="${p.id}" placeholder="https://example.com/image.jpg" data-field="image" />
       </td>
 
       <td>
@@ -270,10 +254,13 @@ function enableRow(id) {
 
   row.querySelectorAll(".row-input").forEach((el) => (el.disabled = false));
 
-  const fileInput = row.querySelector(".inline-img-input");
+  const urlInput = row.querySelector(".inline-img-input");
+  if (urlInput) {
+    urlInput.value = state.products.find((p) => p.id === id)?.image || "";
+    urlInput.classList.remove("d-none");
+  }
+
   const imgEl = row.querySelector(".row-img");
-  const noImgLabel = row.querySelector(".no-img-label");
-  if (fileInput) fileInput.classList.remove("d-none");
   if (imgEl) imgEl.classList.add("d-none");
 
   row.querySelector(".btn-edit").classList.add("d-none");
@@ -294,7 +281,7 @@ function cancelEdit(id) {
   if (fileInput) fileInput.classList.add("d-none");
 }
 
-async function saveInlineEdit(id) {
+function saveInlineEdit(id) {
   const row = document.querySelector(`tr[data-id="${id}"]`);
   if (!row) return;
 
@@ -323,11 +310,11 @@ async function saveInlineEdit(id) {
     return;
   }
 
-  const imgInput = row.querySelector(".inline-img-input");
-  let image = state.products.find((p) => p.id === id)?.image || "";
-  if (imgInput && imgInput.files[0]) {
-    image = await fileToBase64(imgInput.files[0]);
-  }
+  const urlInput = row.querySelector(".inline-img-input");
+  const image =
+    urlInput && urlInput.value.trim()
+      ? urlInput.value.trim()
+      : state.products.find((p) => p.id === id)?.image || "";
 
   updateProduct(id, { name: nameVal, price, quantity, description, image });
 }
@@ -543,7 +530,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("prodQuantity").value.trim(),
       );
       const description = document.getElementById("prodDesc").value.trim();
-      const imgFile = document.getElementById("prodImg").files[0];
+      const image = document.getElementById("prodImg").value.trim();
 
       const errors = [];
       if (!name) errors.push("• Name is required.");
@@ -555,14 +542,15 @@ document.addEventListener("DOMContentLoaded", () => {
       else if (isNaN(quantity)) errors.push("• Quantity must be a number.");
       else if (quantity < 0) errors.push("• Quantity cannot be negative.");
       if (!description) errors.push("• Description is required.");
-      if (!imgFile) errors.push("• Image is required.");
+      if (!image) errors.push("• Image URL is required.");
+      else if (!/^https?:\/\/.+\..+/.test(image))
+        errors.push("• Please enter a valid image URL.");
 
       if (errors.length) {
         alert("Please fix the following:\n\n" + errors.join("\n"));
         return;
       }
 
-      const image = await fileToBase64(imgFile);
       addProduct({ name, price, quantity, description, image });
 
       document.querySelector("#newProdModal form").reset();
