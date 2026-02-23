@@ -94,12 +94,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document
     .querySelector("#newProdModal .modal-footer .btn-primary")
-    .addEventListener("click", () => {
+    .addEventListener("click", async () => {
       const name = document.getElementById("prodName").value.trim();
       const priceRaw = document.getElementById("prodPrice").value.trim();
       const quantityRaw = document.getElementById("prodQuantity").value.trim();
       const description = document.getElementById("prodDesc").value.trim();
-      const image = document.getElementById("prodImg").value.trim();
+      const imgFile = document.getElementById("prodImg").files[0];
 
       const price = parseFloat(priceRaw);
       const quantity = parseInt(quantityRaw);
@@ -114,16 +114,14 @@ document.addEventListener("DOMContentLoaded", () => {
         errors.push("• Quantity must be a whole number.");
       else if (quantity < 0) errors.push("• Quantity cannot be negative.");
       if (!description) errors.push("• Description is required.");
-      if (!image) errors.push("• Image URL is required.");
-      else if (!/^https?:\/\/.+\..+/.test(image))
-        errors.push("• Please enter a valid image URL.");
+      if (!imgFile) errors.push("• Image is required.");
 
       if (errors.length) {
         alert("Please fix the following:\n\n" + errors.join("\n"));
         return;
       }
 
-      products.add({ name, price, quantity, description, image });
+      await products.add({ name, price, quantity, description }, imgFile);
       document.querySelector("#newProdModal form").reset();
       bootstrap.Modal.getInstance(newProdModal).hide();
     });

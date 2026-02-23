@@ -51,6 +51,28 @@ class Products {
     });
   }
 
+  #fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  #validateImageFile(file) {
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    const maxSize = 300 * 1024;
+
+    if (!allowedTypes.includes(file.type)) {
+      return "• Image must be a JPG, PNG, WEBP, or GIF file.";
+    }
+    if (file.size > maxSize) {
+      return `• Image size must not exceed 300KB. Your file is ${(file.size / 1024).toFixed(1)}KB.`;
+    }
+    return null;
+  }
+
   #renderRow(p) {
     const isEditing = this.#editingId === p.id;
     return `
@@ -87,7 +109,7 @@ class Products {
               ? `<img class="img-fluid row-img mb-1 cursor-pointer" data-id="${p.id}" src="${p.image}" alt="${p.name}" style="max-height:50px;display:block" data-bs-toggle="modal" data-bs-target="#imgPreviewModal" data-full-src="${p.image}" />`
               : `<span class="text-muted small no-img-label" data-id="${p.id}">No image</span>`
           }
-          <input type="url" class="form-control form-control-sm inline-img-input row-input d-none" data-id="${p.id}" placeholder="https://example.com/image.jpg" data-column="image" />
+          <input type="file" class="form-control form-control-sm inline-img-input d-none" data-id="${p.id}" accept="image/jpeg,image/png,image/webp,image/gif" />
         </td>
         <td>
           <input
@@ -112,7 +134,10 @@ class Products {
           />
         </td>
         <td>
-          <div class="d-flex gap-1 justify-content-center">
+          <div class="d-flex gap-1">
+            <button class="btn btn-info btn-sm btn-view ${isEditing ? "d-none" : ""}" data-id="${p.id}" title="View">
+              <i class="bi bi-eye"></i>
+            </button>
             <button class="btn btn-warning btn-sm btn-edit ${isEditing ? "d-none" : ""}" data-id="${p.id}" title="Edit">
               <i class="bi bi-pencil"></i>
             </button>
@@ -136,7 +161,6 @@ class Products {
     row.querySelectorAll(".row-input").forEach((el) => (el.disabled = false));
     const urlInput = row.querySelector(".inline-img-input");
     if (urlInput) {
-      urlInput.value = this.#products.find((p) => p.id === id)?.image || "";
       urlInput.classList.remove("d-none");
     }
     const imgEl = row.querySelector(".row-img");
@@ -194,7 +218,15 @@ class Products {
     });
   }
 
-  add(data) {
+  async add(data, imageFile) {
+    if (imageFile) {
+      const error = this.#validateImageFile(imageFile);
+      if (error) {
+        alert(error);
+        return;
+      }
+      data.image = await this.#fileToBase64(imageFile);
+    }
     const product = { id: this.#generateId(), ...data };
     this.#products.push(product);
     this.#save();
@@ -265,7 +297,7 @@ class Products {
     }
   }
 
-  saveEdit(id) {
+  async saveEdit(id) {
     const row = document.querySelector(`tr[data-id="${id}"]`);
     if (!row) return;
 
@@ -291,16 +323,24 @@ class Products {
     else if (quantity < 0) errors.push("• Quantity cannot be negative.");
     if (!description) errors.push("• Description is required.");
 
+    const fileInput = row.querySelector(".inline-img-input");
+    let image = this.#products.find((p) => p.id === id)?.image || "";
+
+    if (fileInput && fileInput.files[0]) {
+      const error = this.#validateImageFile(fileInput.files[0]);
+      if (error) {
+        alert(error);
+        return;
+      }
+      image = await this.#fileToBase64(fileInput.files[0]);
+    }
+
+    this.update(id, { name: nameVal, price, quantity, description, image });
+
     if (errors.length) {
       alert("Please fix the following:\n\n" + errors.join("\n"));
       return;
     }
-
-    const urlInput = row.querySelector(".inline-img-input");
-    const image =
-      urlInput && urlInput.value.trim()
-        ? urlInput.value.trim()
-        : this.#products.find((p) => p.id === id)?.image || "";
 
     this.update(id, { name: nameVal, price, quantity, description, image });
   }
@@ -344,6 +384,31 @@ class Products {
     };
   }
 
+  getById(id) {
+    return this.#products.find((p) => p.id === id) || null;
+  }
+
+  showViewModal(p) {
+    document.getElementById("viewProdId").textContent = p.id;
+    document.getElementById("viewProdName").textContent = p.name;
+    document.getElementById("viewProdPrice").innerHTML = `&#8377;${p.price}`;
+    document.getElementById("viewProdQuantity").textContent = p.quantity;
+    document.getElementById("viewProdDesc").textContent = p.description;
+
+    const imgEl = document.getElementById("viewProdImg");
+    if (p.image) {
+      imgEl.src = p.image;
+      imgEl.classList.remove("d-none");
+    } else {
+      imgEl.src = "";
+      imgEl.classList.add("d-none");
+    }
+
+    bootstrap.Modal.getOrCreateInstance(
+      document.getElementById("viewProdModal"),
+    ).show();
+  }
+
   render() {
     this.#applyFilter();
     this.#renderTable();
@@ -360,6 +425,13 @@ class Products {
     }
 
     tbody.innerHTML = data.map((p) => this.#renderRow(p)).join("");
+
+    tbody.querySelectorAll(".btn-view").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const product = this.getById(btn.dataset.id);
+        if (product) this.showViewModal(product);
+      });
+    });
 
     tbody.querySelectorAll(".btn-edit").forEach((btn) => {
       btn.addEventListener("click", () => this.startEdit(btn.dataset.id));
@@ -383,11 +455,19 @@ class Products {
     });
 
     tbody.querySelectorAll(".inline-img-input").forEach((input) => {
-      input.addEventListener("input", () => {
+      input.addEventListener("change", async () => {
+        const file = input.files[0];
+        if (!file) return;
+        const error = this.#validateImageFile(file);
+        if (error) {
+          alert(error);
+          input.value = "";
+          return;
+        }
         const preview = tbody.querySelector(
           `.row-img[data-id="${input.dataset.id}"]`,
         );
-        if (preview && input.value.trim()) preview.src = input.value.trim();
+        if (preview) preview.src = await this.#fileToBase64(file);
       });
     });
 

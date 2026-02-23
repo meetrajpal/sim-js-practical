@@ -200,6 +200,72 @@
 
     <div
       class="modal fade"
+      id="viewProdModal"
+      tabindex="-1"
+      data-bs-backdrop="static"
+      aria-labelledby="viewProdModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="viewProdModalLabel">Product Details</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row gap-3">
+              <div class="col-12 col-md-4 text-center">
+                <img
+                  id="viewProdImg"
+                  src=""
+                  alt=""
+                  class="img-fluid rounded"
+                  style="max-height: 200px; object-fit: contain"
+                />
+              </div>
+              <div class="col d-flex flex-column gap-2">
+                <div>
+                  <span class="text-muted small">ID</span>
+                  <p id="viewProdId" class="mb-0 fw-semibold"></p>
+                </div>
+                <div>
+                  <span class="text-muted small">Name</span>
+                  <p id="viewProdName" class="mb-0 fw-semibold"></p>
+                </div>
+                <div>
+                  <span class="text-muted small">Price</span>
+                  <p id="viewProdPrice" class="mb-0 fw-semibold"></p>
+                </div>
+                <div>
+                  <span class="text-muted small">Quantity</span>
+                  <p id="viewProdQuantity" class="mb-0 fw-semibold"></p>
+                </div>
+                <div>
+                  <span class="text-muted small">Description</span>
+                  <p id="viewProdDesc" class="mb-0 fw-semibold"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
       id="newProdModal"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
@@ -246,11 +312,11 @@
                   <div>
                     <label for="prodImg" class="form-label">Image</label>
                     <input
-                      type="url"
+                      type="file"
                       name="image"
                       id="prodImg"
                       class="form-control"
-                      placeholder="https://example.com/image.jpg"
+                      accept="image/jpeg,image/png,image/webp,image/gif"
                       required
                     />
                   </div>
