@@ -104,26 +104,66 @@ document.addEventListener("DOMContentLoaded", () => {
       const price = parseFloat(priceRaw);
       const quantity = parseInt(quantityRaw);
 
-      const errors = [];
-      if (!name) errors.push("• Name is required.");
-      if (!priceRaw) errors.push("• Price is required.");
-      else if (isNaN(price)) errors.push("• Price must be a number.");
-      else if (price <= 0) errors.push("• Price must be greater than 0.");
-      if (!quantityRaw) errors.push("• Quantity is required.");
-      else if (isNaN(quantity))
-        errors.push("• Quantity must be a whole number.");
-      else if (quantity < 0) errors.push("• Quantity cannot be negative.");
-      if (!description) errors.push("• Description is required.");
-      if (!imgFile) errors.push("• Image is required.");
-
-      if (errors.length) {
-        alert("Please fix the following:\n\n" + errors.join("\n"));
+      if (!name) {
+        document.getElementById("nmeError").innerText = "Name is required.";
         return;
+      } else if (name) {
+        document.getElementById("nmeError").innerText = "";
       }
 
-      await products.add({ name, price, quantity, description }, imgFile);
-      document.querySelector("#newProdModal form").reset();
-      bootstrap.Modal.getInstance(newProdModal).hide();
+      if (!priceRaw) {
+        document.getElementById("priceError").innerText = "Price is required.";
+        return;
+      } else if (isNaN(price)) {
+        document.getElementById("priceError").innerText =
+          "Price must be a number.";
+        return;
+      } else if (price <= 0) {
+        document.getElementById("priceError").innerText =
+          "Price must be greater than 0.";
+        return;
+      } else {
+        document.getElementById("priceError").innerText = "";
+      }
+
+      if (!quantityRaw) {
+        document.getElementById("qtyError").innerText = "Quantity is required.";
+        return;
+      } else if (isNaN(quantity)) {
+        document.getElementById("qtyError").innerText =
+          "Quantity must be a whole number.";
+        return;
+      } else if (quantity < 0) {
+        document.getElementById("qtyError").innerText =
+          "Quantity cannot be negative.";
+        return;
+      } else {
+        document.getElementById("qtyError").innerText = "";
+      }
+
+      if (!description) {
+        document.getElementById("descError").innerText =
+          "Description is required.";
+        return;
+      } else if (description) {
+        document.getElementById("descError").innerText = "";
+      }
+
+      if (!imgFile) {
+        document.getElementById("imgError").innerText = "Image is required.";
+        return;
+      } else if (imgFile) {
+        document.getElementById("imgError").innerText = "";
+      }
+
+      const result = await products.add(
+        { name, price, quantity, description },
+        imgFile,
+      );
+      if (result) {
+        document.querySelector("#newProdModal form").reset();
+        bootstrap.Modal.getInstance(newProdModal).hide();
+      }
     });
 
   newProdModal.addEventListener("hidden.bs.modal", () => {
@@ -155,4 +195,9 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("imgPreviewEl").src =
         e.relatedTarget.dataset.fullSrc;
     });
+
+  document.getElementById("prodPrice").addEventListener("keydown", (e) => {
+    const prevented = ["e", "E", "+", "-"];
+    if (prevented.includes(e.key)) e.preventDefault();
+  });
 });

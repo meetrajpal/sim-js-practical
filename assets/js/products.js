@@ -60,7 +60,7 @@ class Products {
     });
   }
 
-  #validateImageFile(file) {
+  #validateInlineImageFile(file) {
     const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
     const maxSize = 300 * 1024;
 
@@ -70,6 +70,24 @@ class Products {
     if (file.size > maxSize) {
       return `• Image size must not exceed 300KB. Your file is ${(file.size / 1024).toFixed(1)}KB.`;
     }
+    return null;
+  }
+
+  #validateImageFile(file) {
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    const maxSize = 300 * 1024;
+
+    if (!allowedTypes.includes(file.type)) {
+      document.getElementById("imgError").innerText =
+        "Image must be a JPG, PNG, WEBP, or GIF file.";
+      return true;
+    }
+    if (file.size > maxSize) {
+      document.getElementById("imgError").innerText =
+        "Image size must not exceed 300KB.";
+      return true;
+    }
+    document.getElementById("imgError").innerText = "";
     return null;
   }
 
@@ -221,16 +239,15 @@ class Products {
   async add(data, imageFile) {
     if (imageFile) {
       const error = this.#validateImageFile(imageFile);
-      if (error) {
-        alert(error);
-        return;
-      }
+      if (error) return false;
+
       data.image = await this.#fileToBase64(imageFile);
     }
     const product = { id: this.#generateId(), ...data };
     this.#products.push(product);
     this.#save();
     this.render();
+    return true;
   }
 
   update(id, data) {
@@ -327,7 +344,7 @@ class Products {
     let image = this.#products.find((p) => p.id === id)?.image || "";
 
     if (fileInput && fileInput.files[0]) {
-      const error = this.#validateImageFile(fileInput.files[0]);
+      const error = this.#validateInlineImageFile(fileInput.files[0]);
       if (error) {
         alert(error);
         return;
@@ -458,7 +475,7 @@ class Products {
       input.addEventListener("change", async () => {
         const file = input.files[0];
         if (!file) return;
-        const error = this.#validateImageFile(file);
+        const error = this.#validateInlineImageFile(file);
         if (error) {
           alert(error);
           input.value = "";

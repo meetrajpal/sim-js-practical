@@ -289,7 +289,10 @@
               <div class="row row-cols-2">
                 <div class="d-flex flex-column gap-2">
                   <div>
-                    <label for="prodName" class="form-label">Name</label>
+                    <label for="prodName" class="form-label">
+                      Name
+                      <span class="text-danger">*</span>
+                    </label>
                     <input
                       type="text"
                       name="name"
@@ -297,9 +300,13 @@
                       class="form-control"
                       required
                     />
+                    <span id="nmeError" class="text-danger"></span>
                   </div>
                   <div>
-                    <label for="prodPrice" class="form-label">Price</label>
+                    <label for="prodPrice" class="form-label">
+                      Price
+                      <span class="text-danger">*</span>
+                    </label>
                     <input
                       type="number"
                       name="price"
@@ -308,9 +315,13 @@
                       min="1"
                       required
                     />
+                    <span id="priceError" class="text-danger"></span>
                   </div>
                   <div>
-                    <label for="prodImg" class="form-label">Image</label>
+                    <label for="prodImg" class="form-label">
+                      Image
+                      <span class="text-danger">*</span>
+                    </label>
                     <input
                       type="file"
                       name="image"
@@ -319,13 +330,14 @@
                       accept="image/jpeg,image/png,image/webp,image/gif"
                       required
                     />
+                    <span id="imgError" class="text-danger"></span>
                   </div>
                 </div>
                 <div class="d-flex flex-column gap-2">
                   <div>
-                    <label for="prodQuantity" class="form-label"
-                      >Quantity</label
-                    >
+                    <label for="prodQuantity" class="form-label">
+                      Quantity <span class="text-danger">*</span>
+                    </label>
                     <input
                       type="number"
                       name="quantity"
@@ -334,9 +346,12 @@
                       min="1"
                       required
                     />
+                    <span id="qtyError" class="text-danger"></span>
                   </div>
                   <div class="mt-2">
-                    <label for="prodDesc" class="form-label">Description</label>
+                    <label for="prodDesc" class="form-label">
+                      Description <span class="text-danger">*</span>
+                    </label>
                     <textarea
                       type="textarea"
                       name="desc"
@@ -346,6 +361,7 @@
                       rows="4"
                     >
                     </textarea>
+                    <span id="descError" class="text-danger"></span>
                   </div>
                 </div>
               </div>
