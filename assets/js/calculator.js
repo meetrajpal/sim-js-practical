@@ -122,9 +122,7 @@ class Calculator {
       result = "Error";
     }
 
-    if (window.HistoryManager) {
-      HistoryManager.save(fullExpression + " =", String(result));
-    }
+    HistoryManager.save(fullExpression + " =", String(result));
 
     document.getElementById("lastResult").textContent = fullExpression + " =";
     this.currentValue = String(result);
