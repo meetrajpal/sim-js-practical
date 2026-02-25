@@ -99,7 +99,7 @@ class Products {
           <input type="checkbox" class="form-check-input row-check" data-id="${p.id}" />
         </td>
         <td class="position-sticky start-0 text-muted small">${p.id}</td>
-        <td>
+        <td style="width:15%">
           <input
             type="text"
             class="form-control form-control-sm row-input"
@@ -109,7 +109,7 @@ class Products {
             disabled
           />
         </td>
-        <td>
+        <td style="width:90px">
           <input
             type="number"
             class="form-control form-control-sm row-input"
@@ -117,11 +117,11 @@ class Products {
             data-column="price"
             value="${p.price}"
             min="1"
-            style="width:90px"
+            
             disabled
           />
         </td>
-        <td style="width:110px">
+        <td style="width:210px">
           ${
             p.image
               ? `<img class="img-fluid row-img mb-1 cursor-pointer" data-id="${p.id}" src="${p.image}" alt="${p.name}" style="max-height:50px;display:block" data-bs-toggle="modal" data-bs-target="#imgPreviewModal" data-full-src="${p.image}" />`
@@ -129,7 +129,7 @@ class Products {
           }
           <input type="file" class="form-control form-control-sm inline-img-input d-none" data-id="${p.id}" accept="image/jpeg,image/png,image/webp,image/gif" />
         </td>
-        <td>
+        <td style="width:90px">
           <input
             type="number"
             class="form-control form-control-sm row-input"
@@ -137,14 +137,13 @@ class Products {
             data-column="quantity"
             value="${p.quantity}"
             min="0"
-            style="width:90px"
             disabled
           />
         </td>
         <td>
           <input
             type="text"
-            class="form-control form-control-sm row-input"
+            class="form-control form-control-sm row-input text-truncate"
             data-id="${p.id}"
             data-column="description"
             value="${p.description}"
@@ -185,6 +184,7 @@ class Products {
     if (imgEl) imgEl.classList.add("d-none");
     row.querySelector(".btn-edit").classList.add("d-none");
     row.querySelector(".btn-delete-row").classList.add("d-none");
+    row.querySelector(".btn-view").classList.add("d-none");
     row.querySelector(".btn-save-inline").classList.remove("d-none");
     row.querySelector(".btn-cancel-inline").classList.remove("d-none");
   }
@@ -195,6 +195,7 @@ class Products {
     row.querySelectorAll(".row-input").forEach((el) => (el.disabled = true));
     row.querySelector(".btn-edit").classList.remove("d-none");
     row.querySelector(".btn-delete-row").classList.remove("d-none");
+    row.querySelector(".btn-view").classList.remove("d-none");
     row.querySelector(".btn-save-inline").classList.add("d-none");
     row.querySelector(".btn-cancel-inline").classList.add("d-none");
     const urlInput = row.querySelector(".inline-img-input");
@@ -339,6 +340,13 @@ class Products {
     else if (isNaN(quantity)) errors.push("• Quantity must be a whole number.");
     else if (quantity < 0) errors.push("• Quantity cannot be negative.");
     if (!description) errors.push("• Description is required.");
+    else if (description.length > 300)
+      errors.push("• Description length should be upto 300 characters only.");
+
+    if (errors.length) {
+      alert("Please fix the following:\n\n" + errors.join("\n"));
+      return;
+    }
 
     const fileInput = row.querySelector(".inline-img-input");
     let image = this.#products.find((p) => p.id === id)?.image || "";
@@ -350,13 +358,6 @@ class Products {
         return;
       }
       image = await this.#fileToBase64(fileInput.files[0]);
-    }
-
-    this.update(id, { name: nameVal, price, quantity, description, image });
-
-    if (errors.length) {
-      alert("Please fix the following:\n\n" + errors.join("\n"));
-      return;
     }
 
     this.update(id, { name: nameVal, price, quantity, description, image });

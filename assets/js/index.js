@@ -145,6 +145,10 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("descError").innerText =
           "Description is required.";
         return;
+      } else if (description.length > 300) {
+        document.getElementById("descError").innerText =
+          "Description length should be upto 300 characters only.";
+        return;
       } else if (description) {
         document.getElementById("descError").innerText = "";
       }
