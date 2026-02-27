@@ -383,25 +383,32 @@ document.addEventListener("keydown", (e) => {
   const prevented = ["Enter", "/", "Escape"];
   if (prevented.includes(e.key)) e.preventDefault();
 
+  const isScientific = calcCurMode.getMode() === "scientific";
+
   const keyMap = {
     "+": "add",
     "-": "subtract",
     "*": "multiply",
     "/": "divide",
-    "%": "percent",
-    "^": "power",
     "=": "equals",
     Enter: "equals",
     ".": "decimal",
-    "(": "openParen",
-    ")": "closeParen",
     Backspace: "delete",
     Delete: "ce",
     Escape: "clear",
   };
 
+  const scientificKeyMap = {
+    "%": "percent",
+    "^": "power",
+    "(": "openParen",
+    ")": "closeParen",
+  };
+
   if (keyMap[e.key]) {
     handleAction(keyMap[e.key]);
+  } else if (isScientific && scientificKeyMap[e.key]) {
+    handleAction(scientificKeyMap[e.key]);
   } else if ("0123456789".includes(e.key)) {
     handleAction(e.key);
   }
