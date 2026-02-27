@@ -54,6 +54,7 @@ class Calculator {
 
   setOperator(op) {
     const sym = this.getOperatorSymbol(op);
+    const isScientific = calcCurMode.getMode() === "scientific";
 
     if (this.openParens > 0) {
       if (this.resetResultScreen) {
@@ -71,17 +72,27 @@ class Calculator {
       return;
     }
 
-    if (this.operator && !this.resetResultScreen) this.calculate();
-    this.previousValue = this.currentValue;
-
-    if (this.resetResultScreen && this.expression !== "") {
-      this.expression =
-        this.expression.trimEnd().replace(/[+\-x÷^%]+$/, "") + " " + sym + " ";
-    } else {
+    if (!isScientific) {
+      if (this.operator && !this.resetResultScreen) this.calculate();
+      this.previousValue = this.currentValue;
       this.expression =
         this.expression === ""
           ? this.currentValue + " " + sym + " "
           : this.expression + this.currentValue + " " + sym + " ";
+    } else {
+      if (this.resetResultScreen && this.expression !== "") {
+        this.expression =
+          this.expression.trimEnd().replace(/[+\-x÷^%]+$/, "") +
+          " " +
+          sym +
+          " ";
+      } else {
+        this.expression =
+          this.expression === ""
+            ? this.currentValue + " " + sym + " "
+            : this.expression + this.currentValue + " " + sym + " ";
+      }
+      this.previousValue = this.currentValue;
     }
 
     this.operator = op;
@@ -90,40 +101,29 @@ class Calculator {
   }
 
   calculate() {
-    if (this.resetResultScreen && this.operator && this.previousValue !== "") {
+    if (
+      this.resetResultScreen &&
+      this.operator &&
+      this.previousValue !== "" &&
+      this.expression === ""
+    ) {
       this.currentValue = this.previousValue;
       this.resetResultScreen = false;
     }
 
     let fullExpression;
-
     if (this.expression !== "") {
       fullExpression = this.resetResultScreen
         ? this.expression
         : this.expression + this.currentValue;
-
-      if (this.openParens > 0) {
-        fullExpression += ")".repeat(this.openParens);
-      }
+      if (this.openParens > 0) fullExpression += ")".repeat(this.openParens);
     } else {
       if (!this.operator || !this.previousValue) return;
       fullExpression = `${this.previousValue} ${this.operator} ${this.currentValue}`;
     }
 
-    let result;
-    try {
-      let jsExpr = fullExpression
-        .replace(/x/g, "*")
-        .replace(/÷/g, "/")
-        .replace(/\^/g, "**");
-      result = Function(`"use strict"; return (${jsExpr})`)();
-      if (!isFinite(result)) result = "Error";
-    } catch {
-      result = "Error";
-    }
-
+    const result = this.evaluateExpression(fullExpression);
     HistoryManager.save(fullExpression + " =", String(result));
-
     document.getElementById("lastResult").textContent = fullExpression + " =";
     this.currentValue = String(result);
     this.operator = null;
@@ -132,6 +132,78 @@ class Calculator {
     this.openParens = 0;
     this.resetResultScreen = true;
     this.updateResultDisplay();
+  }
+
+  evaluateExpression(expr) {
+    const precedence = {
+      "+": 1,
+      "-": 1,
+      x: 2,
+      "*": 2,
+      "÷": 2,
+      "/": 2,
+      "^": 3,
+      "%": 2,
+    };
+
+    const applyOp = (nums, op) => {
+      const b = nums.pop();
+      const a = nums.pop();
+      switch (op) {
+        case "+":
+          return a + b;
+        case "-":
+          return a - b;
+        case "x":
+        case "*":
+          return a * b;
+        case "÷":
+        case "/":
+          return b === 0 ? "Error" : a / b;
+        case "^":
+          return Math.pow(a, b);
+        case "%":
+          return a % b;
+      }
+    };
+
+    const numStack = [];
+    const opStack = [];
+
+    const parts = expr.trim().match(/\d+\.?\d*|[+\-x÷^%()]/g);
+
+    for (let part of parts) {
+      if (!isNaN(part)) {
+        numStack.push(parseFloat(part));
+      } else if (part === "(") {
+        opStack.push("(");
+      } else if (part === ")") {
+        while (opStack.length && opStack.at(-1) !== "(") {
+          numStack.push(applyOp(numStack, opStack.pop()));
+        }
+        opStack.pop();
+      } else if (precedence[part] !== undefined) {
+        while (
+          opStack.length &&
+          opStack.at(-1) !== "(" &&
+          precedence[opStack.at(-1)] >= precedence[part]
+        ) {
+          const res = applyOp(numStack, opStack.pop());
+          if (res === "Error") return "Error";
+          numStack.push(res);
+        }
+        opStack.push(part);
+      }
+    }
+
+    while (opStack.length) {
+      const res = applyOp(numStack, opStack.pop());
+      if (res === "Error") return "Error";
+      numStack.push(res);
+    }
+
+    const final = numStack[0];
+    return isFinite(final) ? final : "Error";
   }
 
   clearAll() {
@@ -435,7 +507,6 @@ class Calculator {
       this.openParens--;
       document.getElementById("lastResult").textContent = this.expression;
       this.resetResultScreen = true;
-      this.currentValue = "0";
       this.updateResultDisplay();
     }
   }
